@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Task List View</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+      .initial-avatar {
+        margin-left: 20%;
+        width: 40px;
+        height: 40px;
+        border-radius: 20%;
+        background-color: #e83e8c;
+        color: white;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body class="bg-light">
+    <div class="container mt-4">
+      <!-- Navigation Tabs -->
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a class="nav-link" href="#">My Tasks</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Track Tasks</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="#">All Tasks</a>
+        </li>
+        <a
+          class="nav-link"
+          href="#"
+          onclick="window.location.href='index2.html'"
+          >Form View</a
+        >
+      </ul>
+
+      <!-- Filter Section -->
+      <div class="d-flex justify-content-between align-items-center mt-3">
+        <div class="col-md-6 text-start text-md-start d-flex gap-2">
+          <span class="border p-1 rounded"
+            >Total <strong id="totalTasks">0</strong></span
+          >
+          <span class="border p-1 rounded"
+            >Open <strong id="openTasks">0</strong></span
+          >
+          <span class="border p-1 rounded"
+            >Completed <strong id="completedTasks">0</strong></span
+          >
+        </div>
+
+        <button
+          class="btn btn-primary"
+          onclick="window.location.href='index1.html'"
+        >
+          <a href="http://127.0.0.1:5500/index1.html"></a>Add Task
+        </button>
+      </div>
+
+      <!-- Task List -->
+      <div class="card mt-3">
+        <div class="card-header bg-dark text-white">
+          <div class="row">
+            <div class="col-6 fw-bold">Task Details</div>
+            <div class="col-6 col-sm-4 text-end fw-bold">Assigned To</div>
+          </div>
+        </div>
+        <ul id="taskList" class="list-group list-group-flush">
+          <!-- Task Items -->
+          <li
+            class="list-group-item d-flex justify-content-between align-items-center"
+          >
+            <div class="col-9 d-flex align-items-center">
+              <input type="checkbox" class="form-check-input mx-3 ms-0" />
+              <div>
+                <p class="mb-0 fw-semibold">Varsha</p>
+                <p class="mb-0">52 Clip Williams</p>
+                <small class="text-muted">Yesterday</small>
+              </div>
+            </div>
+            <div class="col-5 col-sm-4">
+              <img src="user1.jpg" alt="User" class="avatar" />
+            </div>
+          </li>
+
+          <li
+            class="list-group-item d-flex justify-content-between align-items-center"
+          >
+            <div class="col-9 d-flex align-items-center">
+              <input type="checkbox" class="form-check-input mx-3 ms-0" />
+              <div>
+                <p class="mb-0 fw-semibold">varsha</p>
+                <p class="mb-0">52 Clip Williams</p>
+                <small class="text-muted">Yesterday</small>
+              </div>
+            </div>
+            <div class="col-5 col-sm-4">
+              <img src="user1.jpg" alt="User" class="avatar" />
+            </div>
+          </li>
+
+          <li
+            class="list-group-item d-flex justify-content-between align-items-center"
+          >
+            <div>
+              <p class="mb-0 fw-semibold">Task 2</p>
+              <small class="text-muted">Yesterday</small>
+            </div>
+            <div
+              class="initial-avatar col-5 col-sm-4 d-flex align-items-center justify-content-center"
+            >
+              P
+            </div>
+          </li>
+
+          <li
+            class="list-group-item d-flex justify-content-between align-items-center"
+          >
+            <div>
+              <p class="mb-0 fw-semibold">Task Name</p>
+              <small class="text-muted">Yesterday</small>
+            </div>
+            <div class="col-6 col-sm-4 ms-5">
+              <div
+                class="initial-avatar d-flex align-items-center justify-content-center"
+              >
+                p
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="update.js"></script>
+    <script src="server.js"></script>
+  </body>
+</html>

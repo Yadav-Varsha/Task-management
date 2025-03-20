@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task Management System</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    <div class="container mt-4">
+      <div class="card">
+        <div
+          class="card-header d-flex justify-content-between align-items-center bg-light"
+        >
+          <div>
+            <h5 class="mb-0" id="taskName">Loading...</h5>
+            <small id="taskInitiator">Loading...</small>
+          </div>
+          <div class="col-md-6 text-md-end mt-2 mt-md-0">
+            <div class="d-inline-block border-start ps-3">
+              <p class="mb-1 mx-2"><strong>Due Date</strong></p>
+              <p id="dueDate">Loading...</p>
+            </div>
+            <div class="d-inline-block border-start ps-3">
+              <p class="mb-1"><strong>Status</strong></p>
+              <p id="status">Loading...</p>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <h6 class="fw-bold">Task Owner</h6>
+          <div class="d-flex align-items-center mb-3">
+            <span class="badge bg-primary rounded-circle p-3 me-2">P</span>
+            <span id="taskOwner"></span>
+          </div>
+          <h6 class="fw-bold">Task Details</h6>
+          <table class="table table-bordered">
+            <tr>
+              <td><strong>Task Owner</strong></td>
+              <td id="taskOwnerTable"></td>
+            </tr>
+            <tr>
+              <td><strong>Task Name</strong></td>
+              <td id="taskNameTable"></td>
+            </tr>
+            <tr>
+              <td><strong>Description</strong></td>
+              <td id="description"></td>
+            </tr>
+            <tr>
+              <td><strong>Start Date</strong></td>
+              <td id="startDate"></td>
+            </tr>
+            <tr>
+              <td><strong>Due Date</strong></td>
+              <td id="dueDateTable"></td>
+            </tr>
+            <tr>
+              <td><strong>Reminder</strong></td>
+              <td id="reminder"></td>
+            </tr>
+            <tr>
+              <td><strong>Assigned To</strong></td>
+              <td id="assignedTo"></td>
+            </tr>
+            <tr>
+              <td><strong>Priority</strong></td>
+              <td id="priority"></td>
+            </tr>
+            <tr>
+              <td><strong>Status</strong></td>
+              <td id="statusTable"></td>
+            </tr>
+          </table>
+          <div class="mt-3">
+            <h6 class="fw-bold">Comments</h6>
+            <div class="d-flex align-items-center">
+              <span class="badge bg-primary rounded-circle p-3 me-2">P</span>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Write a comment..."
+              />
+            </div>
+          </div>
+        </div>
+        <div class="card-footer text-start">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            onclick="window.location.href='index3.html'"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function formatDate(isoDate) {
+        if (!isoDate) return "Not set";
+        const date = new Date(isoDate);
+        return date.toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        });
+      }
+
+      function fetchTaskDetails() {
+        const taskId = new URLSearchParams(window.location.search).get(
+          "taskId"
+        );
+        if (!taskId) {
+          alert("Error: Task ID missing. Redirecting...");
+          window.location.href = "index2.html";
+          return;
+        }
+
+        fetch(`http://localhost:5000/tasks/${taskId}`)
+          .then((response) => response.json())
+          .then((task) => {
+            console.log("Fetched Task Data:", task);
+
+            if (!task || Object.keys(task).length === 0) {
+              alert("Task not found!");
+              return;
+            }
+
+            const taskOwner = task.task_owner || "Unknown";
+            const ownerInitial = taskOwner.charAt(0).toUpperCase();
+
+            document.getElementById("taskName").textContent =
+              task.task_name || "No name";
+            document.getElementById(
+              "taskInitiator"
+            ).textContent = `Initiated By ${taskOwner}`;
+            document.getElementById("taskOwner").textContent = taskOwner;
+            document.getElementById("taskOwnerTable").textContent = taskOwner;
+            document.getElementById("taskNameTable").textContent =
+              task.task_name || "No name";
+            document.getElementById("description").textContent =
+              task.description || "No description";
+
+            document.getElementById("startDate").textContent = formatDate(
+              task.start_date
+            );
+            document.getElementById("dueDate").textContent = formatDate(
+              task.due_date
+            );
+            document.getElementById("dueDateTable").textContent = formatDate(
+              task.due_date
+            );
+
+            document.getElementById("reminder").textContent = formatDate(
+              "2025-03-20T12:00:00Z"
+            );
+
+            document.getElementById("assignedTo").textContent = task.assigned_to
+              ? task.assigned_to
+              : task.task_owner || "-";
+
+            document.getElementById("priority").textContent =
+              task.priority || "Not set";
+
+            const statusText = task.status?.toLowerCase();
+            let displayStatus = "Not set";
+            if (statusText === "open") displayStatus = "Open";
+            else if (statusText === "in progress")
+              displayStatus = "In Progress";
+            else if (statusText === "completed") displayStatus = "Completed";
+
+            document.getElementById("status").textContent = displayStatus;
+            document.getElementById("statusTable").textContent = displayStatus;
+
+            document.querySelector(
+              ".d-flex.align-items-center.mb-3 .badge.bg-primary"
+            ).textContent = ownerInitial;
+
+            const commentBadge = document.querySelectorAll(
+              ".d-flex.align-items-center .badge.bg-primary"
+            );
+            if (commentBadge.length > 1) {
+              commentBadge[commentBadge.length - 1].textContent = ownerInitial;
+            }
+          })
+          .catch((error) => {
+            console.error("Fetch Task Details Error:", error);
+            alert("Failed to load task details.");
+          });
+      }
+
+      document.addEventListener("DOMContentLoaded", fetchTaskDetails);
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
